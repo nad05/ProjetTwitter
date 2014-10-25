@@ -1,0 +1,169 @@
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.ArrayList;
+
+import javax.swing.*;
+
+import twitter4j.TwitterException;
+public class InterfaceTweet extends JFrame implements ActionListener {
+	Tweet wt = new Tweet();
+	JPanel global_panel = new JPanel();
+	JPanel titre_panel = new JPanel();
+	JLabel titre = new JLabel("Liste des tweets");
+	JPanel button_panel = new JPanel();
+	JButton actualiser = new JButton("Actualiser");
+	JScrollPane selection_trend = new JScrollPane();
+	JList l = new JList();
+	Vector<String> lesTweets;
+public InterfaceTweet(){
+	
+	try {
+		// Vector<String> lesTweets = new Vector<String>();
+		// lesTweets = Tweet.getTrend();
+		// Tweet wt = new Tweet();
+		lesTweets = wt.getTrend();
+		// lesTweets = Tweet.getTrend();
+		global_panel.setLayout(new BorderLayout());
+		titre_panel.add(titre);
+		actualiser.setPreferredSize(new Dimension(100, 18));
+		actualiser.addActionListener(this);
+		button_panel.add(actualiser);
+	    l.setListData(lesTweets);
+		l.setVisibleRowCount(7);
+		selection_trend.setViewportView(l);
+		global_panel.add(titre_panel, BorderLayout.NORTH);	
+		global_panel.add(button_panel, BorderLayout.SOUTH);
+		global_panel.add(selection_trend, BorderLayout.CENTER);	
+		this.setTitle("Liste tweets tendances");
+		this.setVisible(true);	
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.add(global_panel);
+		this.setSize(350, 300);
+		} catch (TwitterException err) {
+		System.out.println("Erreur");	
+		}
+	
+}
+public static void main(String[] args) {
+	InterfaceTweet fen= new InterfaceTweet();
+	fen.setVisible(true);
+
+}
+
+public void actionPerformed(ActionEvent arg0) {
+	JOptionPane jop1, jop2;
+	 
+	try {
+		int i=0;
+		int changement=0;
+		Vector<String> new_Tweets = wt.getTrend();
+		do{
+			if (new_Tweets.get(i).equals( lesTweets.get(i))){
+				i++;
+				
+			}
+			else {
+				i++;
+				changement+=1;
+				
+			}
+		}while(i<10 );
+		if(changement!=0){
+			//Boîte du message d'information
+			jop1 = new JOptionPane();
+			jop1.showMessageDialog(null, "Il y a "+changement+" mise à jour au niveau des tandances", "Information", JOptionPane.INFORMATION_MESSAGE);
+			lesTweets=new_Tweets;
+			l.setListData(lesTweets);
+		}
+		else{
+			//Boîte du message d'information
+			jop2 = new JOptionPane();
+			jop2.showMessageDialog(null, "Pas de mise à jour pour le moment", "Information", JOptionPane.INFORMATION_MESSAGE);
+		}
+			
+		
+	} catch (TwitterException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
+}
+@Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result
+			+ ((actualiser == null) ? 0 : actualiser.hashCode());
+	result = prime * result
+			+ ((button_panel == null) ? 0 : button_panel.hashCode());
+	result = prime * result
+			+ ((global_panel == null) ? 0 : global_panel.hashCode());
+	result = prime * result + ((l == null) ? 0 : l.hashCode());
+	result = prime * result
+			+ ((selection_trend == null) ? 0 : selection_trend.hashCode());
+	result = prime * result + ((titre == null) ? 0 : titre.hashCode());
+	result = prime * result
+			+ ((titre_panel == null) ? 0 : titre_panel.hashCode());
+	result = prime * result + ((wt == null) ? 0 : wt.hashCode());
+	return result;
+}
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (obj == null)
+		return false;
+	if (getClass() != obj.getClass())
+		return false;
+	InterfaceTweet other = (InterfaceTweet) obj;
+	if (actualiser == null) {
+		if (other.actualiser != null)
+			return false;
+	} else if (!actualiser.equals(other.actualiser))
+		return false;
+	if (button_panel == null) {
+		if (other.button_panel != null)
+			return false;
+	} else if (!button_panel.equals(other.button_panel))
+		return false;
+	if (global_panel == null) {
+		if (other.global_panel != null)
+			return false;
+	} else if (!global_panel.equals(other.global_panel))
+		return false;
+	if (l == null) {
+		if (other.l != null)
+			return false;
+	} else if (!l.equals(other.l))
+		return false;
+	if (selection_trend == null) {
+		if (other.selection_trend != null)
+			return false;
+	} else if (!selection_trend.equals(other.selection_trend))
+		return false;
+	if (titre == null) {
+		if (other.titre != null)
+			return false;
+	} else if (!titre.equals(other.titre))
+		return false;
+	if (titre_panel == null) {
+		if (other.titre_panel != null)
+			return false;
+	} else if (!titre_panel.equals(other.titre_panel))
+		return false;
+	if (wt == null) {
+		if (other.wt != null)
+			return false;
+	} else if (!wt.equals(other.wt))
+		return false;
+	return true;
+}
+}
